@@ -1,10 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\ListController;
-use App\Http\Controllers\Phonebook\PhonebookController;
-use App\Http\Controllers\Chat\ChatController;
 
 
 
@@ -16,9 +12,6 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//laravel vue live chat
-Route::get('/chat',[ChatController::class,'index']);
-Route::post('/send',[ChatController::class,'send']);
 
 
 /*Route::get('{any}', function () {
