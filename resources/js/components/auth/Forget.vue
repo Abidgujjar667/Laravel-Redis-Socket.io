@@ -29,7 +29,7 @@
                                     </form>
                                     <div class="text-center">
                                         <div class="d-flex justify-content-between">
-                                            <router-link to="/login" class="font-weight-bold " >Back to login!</router-link>
+                                            <router-link to="/" class="font-weight-bold " >Back to login!</router-link>
                                         </div>
                                     </div>
                                     <div class="text-center">

@@ -10,24 +10,24 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Register</h1>
                                     </div>
-                                    <form>
+                                    <form @submit.prevent="onsubmit" >
                                         <div class="form-group">
                                             <label>Name</label>
-                                            <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Full Name">
+                                            <input type="text" v-model="form.name" class="form-control" id="exampleInputFirstName" placeholder="Enter Full Name">
                                         </div>
 
                                         <div class="form-group">
                                             <label>Email</label>
-                                            <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
+                                            <input type="email" v-model="form.email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
                                                    placeholder="Enter Email Address">
                                         </div>
                                         <div class="form-group">
                                             <label>Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password">
+                                            <input type="password" v-model="form.password" class="form-control" id="exampleInputPassword" placeholder="Password">
                                         </div>
                                         <div class="form-group">
                                             <label>Repeat Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPasswordRepeat"
+                                            <input type="password" v-model="form.password_confirmation" class="form-control" id="exampleInputPasswordRepeat"
                                                    placeholder="Repeat Password">
                                         </div>
                                         <div class="form-group">
@@ -37,7 +37,7 @@
 
                                     </form>
                                     <div class="text-center">
-                                        <router-link to="/login" class="font-weight-bold " >Already have an account?</router-link>
+                                        <router-link to="/" class="font-weight-bold " >Already have an account?</router-link>
                                     </div>
                                     <div class="text-center">
                                     </div>
@@ -53,7 +53,32 @@
 
 <script>
     export default {
-        name: "Register"
+        name: "Register",
+        data(){
+            return{
+                form:{
+                    name:'',
+                    email:'',
+                    password:'',
+                    password_confirmation:''
+                }
+            }
+        },
+
+        methods:{
+            onsubmit(){
+                axios.post('/api/auth/register',this.form)
+                    .then(res => {
+                        if (res.status==200){
+                            this.$router.push('/home');
+                        }
+                        //console.log(res);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }
+        }
     }
 </script>
 

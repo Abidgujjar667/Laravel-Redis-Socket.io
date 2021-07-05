@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+        $this->middleware('JWT', ['except' => ['login','register']]);
     }
 
     /**
@@ -84,7 +84,10 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'bearer',
             /*'expires_in' => $this->guard()->factory()->getTTL() * 60*/
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+            'user_id' => Auth::user()->id,
+            'user_name' => Auth::user()->name,
+            'user_email' => Auth::user()->email,
         ]);
     }
 
