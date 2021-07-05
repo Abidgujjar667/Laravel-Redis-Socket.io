@@ -310,17 +310,15 @@
 
                     <!-- Container Fluid-->
                     <div class="container-fluid" id="container-wrapper">
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        {{--<div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="./">Home</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
                             </ol>
-                        </div>
+                        </div>--}}
 
                         <!--dynamic area start-->
-
-
                         <!-- route outlet -->
                         <!-- component matched by the route will render here -->
                         <router-view></router-view>
@@ -341,13 +339,16 @@
     <i class="fas fa-angle-up"></i>
 </a>
 
-<script src="{{ asset('js/app.js') }}"></script>
-<script src="{{ asset('backend/vendor/jquery/jquery.min.js') }}"></script>
+
+{{--<script src="{{ asset('backend/vendor/jquery/jquery.min.js') }}"></script>
 <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('backend/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
-<script src="{{ asset('backend/js/ruang-admin.min.js') }}"></script>
+<script src="{{ asset('backend/js/ruang-admin.min.js') }}"></script>--}}
 {{--<script src="{{ asset('backend/vendor/chart.js/Chart.min.js') }}"></script>
 <script src="{{ asset('backend/js/demo/chart-area-demo.js') }}"></script>--}}
+
+    <script src="{{ asset('js/app.js') }}"></script>
+
 </body>
 
 </html>
