@@ -20,7 +20,12 @@ class User {
     }
 
     logedIn(){
-        this.hasToken();
+       return this.hasToken();
+    }
+
+    logedOut(){
+        AppStorage.clear();
+        return true;
     }
 
     name(){

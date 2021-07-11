@@ -17,8 +17,10 @@
 <script>
     export default {
         mounted() {
-            console.log('Component mounted.')
-        }
+            if (!User.logedIn()){
+                this.$router.push({name:'login'});
+            }
+        },
     }
 </script>
 

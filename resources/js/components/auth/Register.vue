@@ -14,21 +14,25 @@
                                         <div class="form-group">
                                             <label>Name</label>
                                             <input type="text" v-model="form.name" class="form-control" id="exampleInputFirstName" placeholder="Enter Full Name">
+                                            <small class="text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Email</label>
                                             <input type="email" v-model="form.email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
                                                    placeholder="Enter Email Address">
+                                            <small class="text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                         </div>
                                         <div class="form-group">
                                             <label>Password</label>
                                             <input type="password" v-model="form.password" class="form-control" id="exampleInputPassword" placeholder="Password">
+                                            <small class="text-danger" v-if="errors.password">{{ errors.password[0] }}</small>
                                         </div>
                                         <div class="form-group">
                                             <label>Repeat Password</label>
                                             <input type="password" v-model="form.password_confirmation" class="form-control" id="exampleInputPasswordRepeat"
                                                    placeholder="Repeat Password">
+                                            <small class="text-danger" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</small>
                                         </div>
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-primary btn-block">Register</button>
@@ -54,6 +58,11 @@
 <script>
     export default {
         name: "Register",
+        mounted() {
+            if (User.logedIn()){
+                this.$router.push({name:'home'});
+            }
+        },
         data(){
             return{
                 form:{
@@ -61,7 +70,9 @@
                     email:'',
                     password:'',
                     password_confirmation:''
-                }
+                },
+
+                errors:{}
             }
         },
 
@@ -75,7 +86,13 @@
                         //console.log(res);
                     })
                     .catch(err => {
-                        console.log(err);
+                        this.errors=err.response.data.errors;
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Invalid Email or Password'
+                        })
+
+                        //console.log(err);
                     })
             }
         }
