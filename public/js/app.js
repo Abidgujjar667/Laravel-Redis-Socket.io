@@ -2360,26 +2360,44 @@ __webpack_require__.r(__webpack_exports__);
         phone: '',
         salary: '',
         address: '',
-        photo: null,
-        date: ''
+        photo: '',
+        joindate: ''
       },
       errors: {}
     };
   },
   methods: {
+    onChange: function onChange(e) {
+      var file = e.target.files[0];
+      /*if (file.size>1048770){
+          Notification.image_validation();
+      }else {
+          let reader=new FileReader();
+          reader.onload=event =>{
+              this.form.photo = event.target.result;
+              console.log(event.target.result);
+          }
+          reader.readAsDataURL(file);
+          this.form.photo = e.target.files[0];
+      }*/
+
+      this.form.photo = e.target.files[0];
+    },
     onsubmit: function onsubmit() {
       var _this = this;
 
-      axios.post('/api/auth/register', this.form).then(function (res) {
-        if (res.status == 200) {
-          _this.$router.push('/home');
+      axios.post('/api/employee', this.form).then(function (res) {
+        if (res.message == 'success') {
+          _this.$router.push({
+            name: 'add-employee'
+          })["catch"](function () {});
         } //console.log(res);
 
       })["catch"](function (err) {
         _this.errors = err.response.data.errors;
         Toast.fire({
           icon: 'warning',
-          title: 'Invalid Email or Password'
+          title: 'Invalid Data'
         }); //console.log(err);
       });
     }
@@ -2401,8 +2419,38 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "index"
+  name: "create",
+  mounted: function mounted() {
+    if (!User.logedIn()) {
+      this.$router.push({
+        name: 'login'
+      });
+    }
+  },
+  methods: {}
 });
 
 /***/ }),
@@ -44901,7 +44949,27 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-lg-12" }, [
                 _c("div", { staticClass: "login-form" }, [
-                  _vm._m(0),
+                  _c(
+                    "div",
+                    { staticClass: "d-flex justify-content-between mb-4" },
+                    [
+                      _c("h4", { staticClass: "h4 text-gray-900" }, [
+                        _vm._v("Add Employee")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "btn btn-info btn-sm",
+                          attrs: { to: "/employee" }
+                        },
+                        [_vm._v("All Employee")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("hr"),
                   _vm._v(" "),
                   _c(
                     "form",
@@ -45106,15 +45174,10 @@ var render = function() {
                             _c("label", [_vm._v("Photo")]),
                             _vm._v(" "),
                             _c("input", {
-                              staticClass: "form-control custom-file-input",
-                              attrs: { type: "file" }
-                            }),
-                            _vm._v(" "),
-                            _vm.errors.photo
-                              ? _c("small", { staticClass: "text-danger" }, [
-                                  _vm._v(_vm._s(_vm.errors.photo[0]))
-                                ])
-                              : _vm._e()
+                              staticClass: "form-control",
+                              attrs: { type: "file" },
+                              on: { change: _vm.onChange }
+                            })
                           ])
                         ])
                       ]),
@@ -45127,48 +45190,36 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.form.date,
-                              expression: "form.date"
+                              value: _vm.form.joindate,
+                              expression: "form.joindate"
                             }
                           ],
                           staticClass: "form-control",
                           attrs: { type: "date" },
-                          domProps: { value: _vm.form.date },
+                          domProps: { value: _vm.form.joindate },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
-                              _vm.$set(_vm.form, "date", $event.target.value)
+                              _vm.$set(
+                                _vm.form,
+                                "joindate",
+                                $event.target.value
+                              )
                             }
                           }
                         }),
                         _vm._v(" "),
-                        _vm.errors.date
+                        _vm.errors.joindate
                           ? _c("small", { staticClass: "text-danger" }, [
-                              _vm._v(_vm._s(_vm.errors.date[0]))
+                              _vm._v(_vm._s(_vm.errors.joindate[0]))
                             ])
                           : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _vm._m(1)
+                      _vm._m(0)
                     ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "text-center" },
-                    [
-                      _c(
-                        "router-link",
-                        {
-                          staticClass: "font-weight-bold ",
-                          attrs: { to: "/employee" }
-                        },
-                        [_vm._v("Go Back")]
-                      )
-                    ],
-                    1
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "text-center" })
@@ -45182,16 +45233,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-center" }, [
-      _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
-        _vm._v("Add Employee")
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -45226,7 +45267,43 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-xl-10 col-lg-12 col-md-12" }, [
+        _c("div", { staticClass: "card shadow-sm my-5" }, [
+          _c("div", { staticClass: "card-body p-0" }, [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-lg-12" }, [
+                _c("div", { staticClass: "login-form" }, [
+                  _c(
+                    "div",
+                    { staticClass: "d-flex justify-content-between mb-2" },
+                    [
+                      _c("h4", { staticClass: "h4 text-gray-900 " }, [
+                        _vm._v("All Employee")
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "router-link",
+                        {
+                          staticClass: "btn btn-info btn-sm",
+                          attrs: { to: "/add-employee" }
+                        },
+                        [_vm._v("Add Employee")]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("hr")
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -60656,6 +60733,16 @@ var Notification = /*#__PURE__*/function () {
         type: 'alert',
         layout: 'topRight',
         text: 'Something went wrong!',
+        timeout: 1000
+      }).show();
+    }
+  }, {
+    key: "image_validation",
+    value: function image_validation() {
+      new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: 'Upload image less than 1MB!',
         timeout: 1000
       }).show();
     }

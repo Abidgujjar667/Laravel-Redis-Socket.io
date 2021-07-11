@@ -7,9 +7,11 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="login-form">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Add Employee</h1>
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h4 class="h4 text-gray-900">Add Employee</h4>
+                                        <router-link to="/employee" class="btn btn-info btn-sm">All Employee</router-link>
                                     </div>
+                                    <hr>
                                     <form @submit.prevent="onsubmit" enctype="multipart/form-data">
                                         <div class="form-row">
                                             <div class="col-md-6 form-group">
@@ -47,16 +49,16 @@
                                             <div class="col-md-6 form-group">
                                                <div class="custom-file">
                                                    <label>Photo</label>
-                                                   <input type="file"  class="form-control custom-file-input"  >
-                                                   <small class="text-danger" v-if="errors.photo">{{ errors.photo[0] }}</small>
+                                                   <input type="file" class="form-control" v-on:change="onChange">
+                                                   <!--<small class="text-danger" v-if="errors.photo">{{ errors.photo[0] }}</small>-->
                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label>Join Date</label>
-                                            <input type="date" v-model="form.date" class="form-control"  >
-                                            <small class="text-danger" v-if="errors.date">{{ errors.date[0] }}</small>
+                                            <input type="date" v-model="form.joindate" class="form-control"  >
+                                            <small class="text-danger" v-if="errors.joindate">{{ errors.joindate[0] }}</small>
                                         </div>
 
                                         <div class="form-group">
@@ -65,9 +67,7 @@
 
 
                                     </form>
-                                    <div class="text-center">
-                                        <router-link to="/employee" class="font-weight-bold " >Go Back</router-link>
-                                    </div>
+
                                     <div class="text-center">
                                     </div>
                                 </div>
@@ -96,8 +96,8 @@
                     phone:'',
                     salary:'',
                     address:'',
-                    photo:null,
-                    date:'',
+                    photo:'',
+                    joindate:'',
                 },
 
                 errors:{}
@@ -105,11 +105,27 @@
         },
 
         methods:{
+            onChange(e) {
+                var file=e.target.files[0];
+                /*if (file.size>1048770){
+                    Notification.image_validation();
+                }else {
+                    let reader=new FileReader();
+                    reader.onload=event =>{
+                        this.form.photo = event.target.result;
+                        console.log(event.target.result);
+                    }
+                    reader.readAsDataURL(file);
+                    this.form.photo = e.target.files[0];
+                }*/
+                this.form.photo = e.target.files[0];
+
+            },
             onsubmit(){
-                axios.post('/api/auth/register',this.form)
+                axios.post('/api/employee',this.form)
                     .then(res => {
-                        if (res.status==200){
-                            this.$router.push('/home');
+                        if (res.message=='success'){
+                            this.$router.push({ name:'add-employee'}).catch(()=>{});
                         }
                         //console.log(res);
                     })
@@ -117,7 +133,7 @@
                         this.errors=err.response.data.errors;
                         Toast.fire({
                             icon: 'warning',
-                            title: 'Invalid Email or Password'
+                            title: 'Invalid Data'
                         })
 
                         //console.log(err);
