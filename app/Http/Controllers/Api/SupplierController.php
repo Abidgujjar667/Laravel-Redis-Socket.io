@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
-use App\Model\Supplier;
 use Image;
 use DB;
 
@@ -34,8 +34,16 @@ class SupplierController extends Controller
          'name' => 'required|unique:suppliers|max:255',
          'email' => 'required',
          'phone' => 'required|unique:suppliers',
+         'photo' => 'required',
 
         ]);
+
+        $supplier = new Supplier;
+        $supplier->name = $request->name;
+        $supplier->email = $request->email;
+        $supplier->phone = $request->phone;
+        $supplier->shopname = $request->shopname;
+        $supplier->address = $request->address;
 
         if ($request->photo) {
          $position = strpos($request->photo, ';');
@@ -44,29 +52,20 @@ class SupplierController extends Controller
 
          $name = time().".".$ext;
          $img = Image::make($request->photo)->resize(240,200);
-         $upload_path = 'backend/supplier/';
+         $upload_path = 'upload/supplier/';
          $image_url = $upload_path.$name;
          $img->save($image_url);
 
-         $supplier = new Supplier;
-         $supplier->name = $request->name;
-         $supplier->email = $request->email;
-         $supplier->phone = $request->phone;
-         $supplier->shopname = $request->shopname;
-         $supplier->address = $request->address;
          $supplier->photo = $image_url;
-         $supplier->save(); 
-     }else{
-         $supplier = new Supplier;
-         $supplier->name = $request->name;
-         $supplier->email = $request->email;
-         $supplier->phone = $request->phone;
-         $supplier->shopname = $request->shopname;
-         $supplier->address = $request->address;
-        
-         $supplier->save(); 
+     }
+        //save record
+        $result= $supplier->save();
 
-     } 
+        if ($result){
+            return response()->json([
+                'message' => 'success'
+            ],200);
+        }
 
     }
 
@@ -109,7 +108,7 @@ class SupplierController extends Controller
 
          $name = time().".".$ext;
          $img = Image::make($image)->resize(240,200);
-         $upload_path = 'backend/supplier/';
+         $upload_path = 'upload/supplier/';
          $image_url = $upload_path.$name;
          $success = $img->save($image_url);
          

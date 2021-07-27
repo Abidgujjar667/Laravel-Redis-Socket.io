@@ -84,7 +84,6 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        return response()->json($id);
         $employee =Employee::where('id',$id)->first();
         return response()->json($employee);
     }
@@ -110,9 +109,9 @@ class EmployeeController extends Controller
         $data['name'] = $request->name;
         $data['email'] = $request->email;
         $data['phone'] = $request->phone;
-        $data['sallery'] = $request->sallery;
+        $data['salary'] = $request->salary;
         $data['address'] = $request->address;
-        $data['joining_date'] = $request->joining_date;
+        $data['joindate'] = $request->joindate;
         $image = $request->newphoto;
 
         if ($image) {

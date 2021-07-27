@@ -2,11 +2,11 @@
     <div>
         <div class="container-fluid" id="container-wrapper">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Employee</h1>
+                <h1 class="h3 mb-0 text-gray-800">Update Supplier</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/home">Home</router-link></li>
-                    <li class="breadcrumb-item">Employee</li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Employee</li>
+                    <li class="breadcrumb-item">Supplier</li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Employee</li>
                 </ol>
             </div>
 
@@ -15,7 +15,7 @@
                     <!-- Simple Tables -->
                     <div class="card">
                         <div class="card-header d-flex flex-row align-items-center justify-content-between">
-                            <router-link to="/employee" class="btn btn-info">All Employee</router-link>
+                            <router-link to="/supplier" class="btn btn-info">All Supplier</router-link>
                         </div>
                         <div class="card-body">
                             <form @submit.prevent="onsubmit" enctype="multipart/form-data">
@@ -40,18 +40,14 @@
                                         <small class="text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
                                     </div>
                                     <div class="col-md-6 form-group">
-                                        <label>Salary</label>
-                                        <input type="text" v-model="form.salary" class="form-control"  placeholder="Enter Salary">
-                                        <small class="text-danger" v-if="errors.salary">{{ errors.salary[0] }}</small>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="col-md-6 form-group">
                                         <label>Address</label>
                                         <input type="text" v-model="form.address" class="form-control"  placeholder="Enter Address">
                                         <small class="text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
                                     </div>
+                                </div>
+
+                                <div class="form-row">
+
                                     <div class="col-md-3 form-group">
                                         <div class="custom-file">
                                             <label>Photo</label>
@@ -65,16 +61,16 @@
                                             <!--<small class="text-danger" v-if="errors.photo">{{ errors.photo[0] }}</small>-->
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label>Join Date</label>
-                                    <input type="date" v-model="form.joindate" class="form-control"  >
-                                    <small class="text-danger" v-if="errors.joindate">{{ errors.joindate[0] }}</small>
+                                    <div class="col-md-6 form-group">
+                                        <label>Shop Name</label>
+                                        <input type="text" v-model="form.shopname" class="form-control" placeholder="Enter shop name" >
+                                        <small class="text-danger" v-if="errors.shopname">{{ errors.shopname[0] }}</small>
+                                    </div>
                                 </div>
 
                                 <div class="form-group text-center mt-2">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-info">Submit</button>
                                 </div>
 
 
@@ -92,7 +88,7 @@
 
 <script>
     export default {
-        name: "Create",
+        name: "Edit",
         mounted() {
             if (!User.logedIn()){
                 this.$router.push({name:'login'});
@@ -104,10 +100,10 @@
                     name:'',
                     email:'',
                     phone:'',
-                    salary:'',
                     address:'',
                     photo:'',
-                    joindate:'',
+                    newphoto:'',
+                    shopname:'',
                 },
 
                 errors:{}
@@ -123,7 +119,7 @@
                 }else {
                     let reader=new FileReader();
                     reader.onload=event =>{
-                        this.form.photo = event.target.result;
+                        this.form.newphoto = event.target.result;
                         //console.log(event.target.result);
                     };
                     reader.readAsDataURL(file);
@@ -133,9 +129,10 @@
 
             },
             onsubmit(){
-                axios.post('/api/employee',this.form)
+                let id=this.$route.params.id;
+                axios.patch('/api/supplier/'+id,this.form)
                     .then(res => {
-                        this.$router.push({ name:'employee'}).catch(()=>{});
+                        this.$router.push({ name:'supplier'}).catch(()=>{});
                         //console.log(res);
                     })
                     .catch(err => {
@@ -148,6 +145,18 @@
                         //console.log(err);
                     })
             }
+        },
+
+        created() {
+            let id=this.$route.params.id;
+            axios.get('/api/supplier/'+id)
+                .then(res =>{
+                    this.form=res.data;
+                    //console.log(res);
+                })
+                .catch(err =>{
+                    console.log(err);
+                })
         }
     }
 </script>

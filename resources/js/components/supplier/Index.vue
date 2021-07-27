@@ -2,11 +2,11 @@
     <div>
         <div class="container-fluid" id="container-wrapper">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Employees List</h1>
+                <h1 class="h3 mb-0 text-gray-800">Supplier List</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/home">Home</router-link></li>
-                    <li class="breadcrumb-item">Employee</li>
-                    <li class="breadcrumb-item active" aria-current="page">All Employee</li>
+                    <li class="breadcrumb-item">Supplier</li>
+                    <li class="breadcrumb-item active" aria-current="page">All Supplier</li>
                 </ol>
             </div>
 
@@ -15,7 +15,7 @@
                     <!-- Simple Tables -->
                     <div class="card">
                         <div class="card-header d-flex  align-items-center justify-content-between">
-                            <router-link to="/add-employee" class="btn btn-info">Add Employee</router-link>
+                            <router-link to="/add-supplier" class="btn btn-info">Add Supplier</router-link>
                             <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
                         </div>
                         <div class="table-responsive">
@@ -25,26 +25,24 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Phone</th>
-                                    <th>Salary</th>
+                                    <th>Shop Name</th>
                                     <th>Address</th>
-                                    <th>Join Date</th>
                                     <th>Image</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="employee in filtersearch" :key="employee.id">
-                                    <td>{{ employee.id }}</td>
-                                    <td>{{ employee.name }}</td>
-                                    <td>{{ employee.phone }}</td>
-                                    <td>{{ employee.salary }}</td>
-                                    <td>{{ employee.address }}</td>
-                                    <td>{{ employee.joindate }}</td>
-                                    <td><img :src="employee.photo" id="em_photo"></td>
+                                <tr v-for="supplier in filtersearch" :key="supplier.id">
+                                    <td>{{ supplier.id }}</td>
+                                    <td>{{ supplier.name }}</td>
+                                    <td>{{ supplier.phone }}</td>
+                                    <td>{{ supplier.shopname }}</td>
+                                    <td>{{ supplier.address }}</td>
+                                    <td><img :src="supplier.photo" id="em_photo"></td>
                                     <td>
-                                        <router-link :to="{name: 'edit-employee', params:{id:employee.id}}" class="btn btn-sm btn-primary">Edit</router-link>
+                                        <router-link :to="{name: 'edit-supplier', params:{id:supplier.id}}" class="btn btn-sm btn-info">Edit</router-link>
 
-                                        <a @click="deleteEmployee(employee.id)" class="btn btn-sm btn-danger text-white">Delete</a>
+                                        <a @click="deleteSupplier(supplier.id)" class="btn btn-sm btn-danger text-white">Delete</a>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -71,29 +69,29 @@
         },
         data(){
           return{
-              employees:[],
+              suppliers:[],
               searchTerm:''
           }
         },
         computed:{
             filtersearch(){
-                return this.employees.filter(employee => {
-                    return employee.name.match(this.searchTerm)
+                return this.suppliers.filter(supplier => {
+                    return supplier.name.match(this.searchTerm)
                 })
             }
         },
         methods:{
-          getEmployees(){
-              axios.get('/api/employee')
+          getSuppliers(){
+              axios.get('/api/supplier')
                   .then(res =>{
-                      this.employees=res.data;
+                      this.suppliers=res.data;
                       //console.log(res.data);
                   })
                   .catch(err =>{
                       console.log(err);
                   })
           },
-            deleteEmployee(id){
+            deleteSupplier(id){
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -104,14 +102,14 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.value) {
-                        axios.delete('/api/employee/'+id)
+                        axios.delete('/api/supplier/'+id)
                             .then(() => {
-                                this.employees = this.employees.filter(employee => {
-                                    return employee.id != id
+                                this.suppliers = this.suppliers.filter(supplier => {
+                                    return supplier.id != id
                                 })
                             })
                             .catch(() => {
-                                this.$router.push({name: 'employee'})
+                                this.$router.push({name: 'supplier'})
                             })
                         Swal.fire(
                             'Deleted!',
@@ -124,7 +122,7 @@
             }
         },
         created() {
-            this.getEmployees();
+            this.getSuppliers();
         }
     }
 </script>

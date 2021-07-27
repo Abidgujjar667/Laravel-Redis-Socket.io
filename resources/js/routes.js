@@ -7,6 +7,11 @@ let Logout=require('./components/auth/Logout.vue').default;
 
 let AddEmployee=require('./components/employee/Create.vue').default;
 let Employee=require('./components/employee/Index.vue').default;
+let EditEmployee=require('./components/employee/Edit.vue').default;
+
+let AddSupplier=require('./components/supplier/Create.vue').default;
+let Supplier=require('./components/supplier/Index.vue').default;
+let EditSupplier=require('./components/supplier/Edit.vue').default;
 
 export const routes = [
     { path: '/', component: Login, name:'login' },
@@ -17,5 +22,10 @@ export const routes = [
 
     { path: '/add-employee', component: AddEmployee, name:'add-employee' },
     { path: '/employee', component: Employee, name:'employee' },
+    { path: '/edit-employee/:id', component: EditEmployee, name:'edit-employee' },
+
+    { path: '/add-supplier', component: AddSupplier, name:'add-supplier' },
+    { path: '/supplier', component: Supplier, name:'supplier' },
+    { path: '/edit-supplier/:id', component: EditSupplier, name:'edit-supplier' },
     /*{ path: '/bar', component: Bar }*/
 ];

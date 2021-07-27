@@ -2,11 +2,11 @@
     <div>
         <div class="container-fluid" id="container-wrapper">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Employee</h1>
+                <h1 class="h3 mb-0 text-gray-800">Update Employee</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link to="/home">Home</router-link></li>
                     <li class="breadcrumb-item">Employee</li>
-                    <li class="breadcrumb-item active" aria-current="page">Add Employee</li>
+                    <li class="breadcrumb-item active" aria-current="page">Update Employee</li>
                 </ol>
             </div>
 
@@ -74,7 +74,7 @@
                                 </div>
 
                                 <div class="form-group text-center mt-2">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary ">Submit</button>
                                 </div>
 
 
@@ -92,7 +92,7 @@
 
 <script>
     export default {
-        name: "Create",
+        name: "Edit",
         mounted() {
             if (!User.logedIn()){
                 this.$router.push({name:'login'});
@@ -107,6 +107,7 @@
                     salary:'',
                     address:'',
                     photo:'',
+                    newphoto:'',
                     joindate:'',
                 },
 
@@ -123,7 +124,7 @@
                 }else {
                     let reader=new FileReader();
                     reader.onload=event =>{
-                        this.form.photo = event.target.result;
+                        this.form.newphoto = event.target.result;
                         //console.log(event.target.result);
                     };
                     reader.readAsDataURL(file);
@@ -133,7 +134,8 @@
 
             },
             onsubmit(){
-                axios.post('/api/employee',this.form)
+                let id=this.$route.params.id;
+                axios.patch('/api/employee/'+id,this.form)
                     .then(res => {
                         this.$router.push({ name:'employee'}).catch(()=>{});
                         //console.log(res);
@@ -148,6 +150,18 @@
                         //console.log(err);
                     })
             }
+        },
+
+        created() {
+            let id=this.$route.params.id;
+            axios.get('/api/employee/'+id)
+                .then(res =>{
+                    this.form=res.data;
+                    //console.log(res);
+                })
+                .catch(err =>{
+                    console.log(err);
+                })
         }
     }
 </script>
