@@ -16,7 +16,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employee=Employee::all();
+        $employee=Employee::get()->toArray();
         return response()->json($employee);
     }
 
@@ -35,15 +35,15 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        /*$validate=$request->validate([
+        $validate=$request->validate([
             'name' => ['required','string','max:255'],
-            'email' => ['email','unique:employee','required','string','max:255'],
+            'email' => ['email','unique:employees','required','string','max:255'],
             'phone' => ['required'],
             'salary' => ['required'],
             'address' => ['required'],
             'photo' => ['required'],
             'joindate' => ['required'],
-        ]);*/
+        ]);
 
         $data=array();
         $data['name']=$request->name;
@@ -54,10 +54,18 @@ class EmployeeController extends Controller
         $data['joindate']=$request->joindate;
 
         if ($request->photo) {
-            $imageName = time().'.'.$request->photo->getClientOriginalExtension();
-            $image_url=$request->photo->move(public_path('upload'), $imageName);
+            $position=strpos($request->photo,';');
+            $sub=substr($request->photo,0,$position);
+            $ext=explode('/',$sub)[1];
 
-            $data['photo']=$image_url;
+            $name=time().".".$ext;
+            $img=Image::make($request->photo)->resize(240,200);
+            $upload_path="upload/employee/";
+            $img_url=$upload_path.$name;
+            $img->save($img_url);
+
+            $data['photo']=$img_url;
+
         }
 
         $result=Employee::create($data);
@@ -76,7 +84,9 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json($id);
+        $employee =Employee::where('id',$id)->first();
+        return response()->json($employee);
     }
 
     /**
@@ -85,10 +95,7 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -99,7 +106,40 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = array();
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['phone'] = $request->phone;
+        $data['sallery'] = $request->sallery;
+        $data['address'] = $request->address;
+        $data['joining_date'] = $request->joining_date;
+        $image = $request->newphoto;
+
+        if ($image) {
+            $position = strpos($image, ';');
+            $sub = substr($image, 0, $position);
+            $ext = explode('/', $sub)[1];
+
+            $name = time().".".$ext;
+            $img = Image::make($image)->resize(240,200);
+            $upload_path = 'upload/employee/';
+            $image_url = $upload_path.$name;
+            $success = $img->save($image_url);
+
+            if ($success) {
+                $data['photo'] = $image_url;
+                $img =Employee::where('id',$id)->first();
+                $image_path = $img->photo;
+                $done = unlink($image_path);
+                $user  =Employee::where('id',$id)->update($data);
+            }
+
+        }else{
+            $oldphoto = $request->photo;
+            $data['photo'] = $oldphoto;
+            $user =Employee::where('id',$id)->update($data);
+        }
+
     }
 
     /**
@@ -110,6 +150,13 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $employee =Employee::where('id',$id)->first();
+        $photo = $employee->photo;
+        if ($photo) {
+            unlink($photo);
+            Employee::where('id',$id)->delete();
+        }else{
+            Employee::where('id',$id)->delete();
+        }
     }
 }

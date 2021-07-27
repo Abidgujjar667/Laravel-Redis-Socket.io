@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ClassesController;
 use App\Http\Controllers\Api\EmployeeController;
 
-Route::apiResource('/class',ClassesController::class);
+//Route::apiResource('/class',ClassesController::class);
 
 Route::apiResource('/employee',EmployeeController::class);
 
@@ -14,6 +14,7 @@ Route::apiResource('/employee',EmployeeController::class);
 });*/
 
 
+//auth routes
 Route::group([
     'namespace' => 'App\Http\Controllers\Api',
     'prefix' => 'auth'
