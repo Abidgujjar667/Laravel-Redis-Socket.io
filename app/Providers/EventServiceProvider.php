@@ -8,6 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\ChatEvent;
 use App\Listeners\ChatListener;
+use App\Events\TestEvent;
+use App\Listeners\TestListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ChatEvent::class=>[
           ChatListener::class,
+        ],
+        TestEvent::class=>[
+            TestListener::class,
         ],
     ];
 

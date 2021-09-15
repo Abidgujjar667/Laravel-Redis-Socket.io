@@ -9,8 +9,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -76,5 +75,18 @@
             @yield('content')
         </main>
     </div>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" ></script>
+    <script>
+        Echo.channel('laravel_database_test')
+            .listen('.TestEvent',function (e) {
+                console.log(e);
+            });
+
+        console.log('testing event');
+    </script>
+    @section('script')
+
+    @show
 </body>
 </html>
