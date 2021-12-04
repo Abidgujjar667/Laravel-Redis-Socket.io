@@ -9,7 +9,7 @@ use App\Events\TestEvent;
 class TestController extends Controller
 {
     public function index(){
-        $message='Welcome to redis';
+        $message='Laravel Event Broadcasting With Redis and Socket.io';
         TestEvent::dispatch($message);
         //event(new TestEvent($message));
         return "event sent";

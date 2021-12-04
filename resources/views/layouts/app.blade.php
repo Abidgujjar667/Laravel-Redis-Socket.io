@@ -77,14 +77,7 @@
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" ></script>
-    <script>
-        Echo.channel('laravel_database_test')
-            .listen('.TestEvent',function (e) {
-                console.log(e);
-            });
 
-        console.log('testing event');
-    </script>
     @section('script')
 
     @show
